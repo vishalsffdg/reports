@@ -1,0 +1,2637 @@
+EXPERIMENT 1 – OBJECT DETECTION USING IR SENSOR
+
+AIM
+
+To interface an IR (Infrared) sensor with Arduino and detect the presence of an object using digital output.
+
+THEORY
+
+An IR sensor works on the principle of infrared light reflection. It consists of an IR transmitter (IR
+
+LED) and an IR receiver (photodiode or phototransistor).
+
+• The IR transmitter emits infrared rays.
+
+• When an object comes in front of the sensor, the rays are reflected back.
+
+• The IR receiver detects the reflected rays and produces a digital output.
+
+Most IR sensor modules provide digital output:
+
+• LOW → Object detected
+
+• HIGH → No object detected
+
+IR sensors are widely used in obstacle detection, line-following robots, proximity sensing, and automation systems.
+
+COMPONENTS REQUIRED:
+
+• Arduino Uno
+
+• IR Sensor Module
+
+• Connecting Wires
+
+CIRCUIT DIAGRAM
+
+
+
+CODE
+
+int irPin = 2; // IR sensor output pin int ledPin = 13; // LED pin
+
+
+
+void setup() {
+
+pinMode(irPin, INPUT);
+
+pinMode(ledPin, OUTPUT);
+
+Serial.begin(9600);
+
+}
+
+
+
+void loop() {
+
+int irState = digitalRead(irPin);
+
+
+
+if (irState == LOW) { // Object detected digitalWrite(ledPin, HIGH); // LED ON
+
+Serial.println("Object Detected");
+
+} else { // No object digitalWrite(ledPin, LOW); // LED OFF
+
+Serial.println("No Object");
+
+}
+
+
+
+delay(500);
+
+}
+
+
+
+EXPERIMENT 2– DISTANCE MEASUREMENT USING ULTRASONIC SENSOR
+
+AIM
+
+To interface an ultrasonic sensor with Arduino and measure the distance of an object using ultrasonic sound waves.
+
+THEORY
+
+An ultrasonic sensor measures distance using ultrasonic sound waves (frequency > 20 kHz). It works on the time-of-flight principle.
+
+
+
+
+
+The sensor has two main pins:
+
+• TRIG (Trigger): Sends ultrasonic pulses
+
+• ECHO (Echo): Receives the reflected pulse Working principle:
+
+1. Arduino sends a short HIGH pulse to the TRIG pin.
+
+2. The ultrasonic sensor emits sound waves.
+
+3. These waves hit an object and reflect back.
+
+4. The ECHO pin stays HIGH for the time taken by the wave to return.
+
+5. Distance is calculated using the formula: Time × Speed of Sound
+
+Distance =
+
+
+
+2
+
+
+
+Speed of sound ≈ 0.034 cm/µs
+
+Ultrasonic sensors are widely used in obstacle detection, distance measurement, parking systems, and robotics.
+
+COMPONENTS REQUIRED:
+
+• Arduino Uno
+
+• Ultrasonic Sensor Module
+
+• Connecting Wires
+
+CIRCUIT DIAGRAM
+
+
+
+
+
+CODE
+
+int trigPin = 3;
+
+int echoPin = 4;
+
+
+
+void setup() {
+
+pinMode(trigPin, OUTPUT);
+
+pinMode(echoPin, INPUT);
+
+Serial.begin(9600);
+
+}
+
+
+
+void loop() {
+
+long duration;
+
+int distance;
+
+
+
+digitalWrite(trigPin, LOW);
+
+delayMicroseconds(2);
+
+digitalWrite(trigPin, HIGH);
+
+delayMicroseconds(10);
+
+digitalWrite(trigPin, LOW);
+
+
+
+duration = pulseIn(echoPin, HIGH);
+
+distance = duration * 0.034 / 2;
+
+
+
+Serial.print("Distance: ");
+
+Serial.print(distance);
+
+Serial.println(" cm");
+
+
+
+delay(500);
+
+}
+
+
+
+
+
+EXPERIMENT 03– TOGGLE LED USING PUSH BUTTON
+
+AIM
+
+To interface a push button with Arduino and control an LED in toggle mode using a switch.
+
+THEORY
+
+A push button is a digital input device that provides HIGH or LOW logic levels. In Arduino, the internal pull-up resistor can be enabled using INPUT_PULLUP, which keeps the input pin HIGH
+
+when the switch is not pressed.
+
+When the button is pressed, the input pin goes LOW. By detecting the transition from HIGH to LOW, the LED state can be toggled. A small debounce delay is added to avoid multiple toggles due to mechanical bouncing of the switch.
+
+This method allows one button to turn the LED ON and OFF alternately.
+
+COMPONENTS REQUIRED:
+
+• Arduino Uno
+
+• Push Button
+
+• Connecting Wires
+
+CIRCUIT DIAGRAM
+
+
+
+
+
+CODE
+
+int switchPin = 2;
+
+int ledPin = 13;
+
+
+
+bool ledState = LOW;
+
+bool lastSwitchState = HIGH;
+
+
+
+void setup() {
+
+pinMode(switchPin, INPUT_PULLUP);
+
+pinMode(ledPin, OUTPUT);
+
+}
+
+
+
+void loop() {
+
+bool currentSwitchState = digitalRead(switchPin);
+
+
+
+// Detect button press (HIGH to LOW)
+
+if (lastSwitchState == HIGH && currentSwitchState == LOW) {
+
+ledState = !ledState; // toggle LED state digitalWrite(ledPin, ledState);
+
+delay(200); // debounce delay
+
+}
+
+
+
+lastSwitchState = currentSwitchState;
+
+}
+
+
+
+
+
+EXPERIMENT 04– LED CONTROL USING PUSH BUTTON (MOMENTARY ON/OFF) AIM
+
+To interface a push button with Arduino and control an LED such that the LED turns ON when the switch is pressed and turns OFF when released.
+
+THEORY
+
+A push button is a digital input device that provides logic HIGH or LOW signals. In Arduino, the internal pull-up resistor can be enabled using INPUT_PULLUP, which keeps the input pin at HIGH
+
+when the switch is not pressed.
+
+• Switch not pressed → Input pin = HIGH
+
+• Switch pressed → Input pin = LOW
+
+An LED is an output device that glows when a HIGH signal is applied. In this experiment, the LED
+
+follows the switch condition and operates in momentary ON/OFF mode.
+
+COMPONENTS REQUIRED
+
+• Arduino Uno
+
+• Push Button
+
+• Connecting Wires
+
+CIRCUIT DIAGRAM
+
+
+
+
+
+CODE
+
+int switchPin = 2;
+
+int ledPin = 13;
+
+
+
+void setup() {
+
+pinMode(switchPin, INPUT_PULLUP); // enable internal pull-up pinMode(ledPin, OUTPUT);
+
+}
+
+
+
+void loop() {
+
+if (digitalRead(switchPin) == LOW) { // switch pressed digitalWrite(ledPin, HIGH); // LED ON
+
+} else {
+
+digitalWrite(ledPin, LOW); // LED OFF
+
+}
+
+}
+
+
+
+EXPERIMENT 05– TOGGLE BUZZER USING PUSH BUTTON
+
+AIM
+
+To interface a push button and a buzzer with Arduino and control the buzzer in toggle mode using a switch.
+
+THEORY
+
+A buzzer is an audio output device that produces sound when a digital HIGH signal is applied to it. Push buttons are digital input devices used to provide control signals to microcontrollers.
+
+In this experiment, the internal pull-up resistor of Arduino is enabled using INPUT_PULLUP. Hence:
+
+• Button not pressed → input reads HIGH
+
+• Button pressed → input reads LOW
+
+To avoid multiple triggering due to mechanical bouncing of the switch, a debounce delay is used.
+
+The buzzer state is toggled (ON/OFF) every time the button is pressed.
+
+
+
+
+
+CIRCUIT DIAGRAM
+
+
+
+CODE
+
+int switchPin = 2;
+
+int buzzerPin = 8;
+
+
+
+bool buzzerState = LOW;
+
+bool lastSwitchState = HIGH;
+
+
+
+void setup() {
+
+pinMode(switchPin, INPUT_PULLUP);
+
+pinMode(buzzerPin, OUTPUT);
+
+}
+
+
+
+void loop() {
+
+bool currentSwitchState = digitalRead(switchPin);
+
+
+
+// Detect button press (HIGH to LOW)
+
+if (lastSwitchState == HIGH && currentSwitchState == LOW) {
+
+buzzerState = !buzzerState; // toggle buzzer digitalWrite(buzzerPin, buzzerState);
+
+
+
+delay(200); // debounce delay
+
+}
+
+
+
+lastSwitchState = currentSwitchState;
+
+}
+
+EXPERIMENT 06 – LDR BASED AUTOMATIC LED CONTROL
+
+AIM
+
+To interface an LDR (Light Dependent Resistor) sensor with Arduino and automatically control an LED based on light intensity.
+
+THEORY
+
+An LDR is a light-sensitive sensor whose resistance changes with the intensity of light. When light falls on the LDR, its resistance decreases, and in dark conditions, its resistance increases.
+
+In this experiment, an LDR digital module is used which provides a digital output:
+
+• HIGH → Dark condition
+
+• LOW → Bright condition
+
+The Arduino reads this digital output and controls the LED automatically. This type of control is widely used in automatic street lighting systems.
+
+
+
+COMPONENTS REQUIRED
+
+• Arduino Uno
+
+• LDR Sensor Module
+
+• Connecting Wires
+
+CIRCUIT DIAGRAM
+
+
+
+CODE
+
+int ldrPin = 2; // LDR digital output
+
+int ledPin = 13; // LED pin
+
+
+
+void setup() {
+
+pinMode(ldrPin, INPUT);
+
+pinMode(ledPin, OUTPUT);
+
+Serial.begin(9600);
+
+}
+
+
+
+void loop() {
+
+int ldrState = digitalRead(ldrPin);
+
+
+
+if (ldrState == HIGH) { // DARK condition Serial.println("LDR Brightness LOW"); digitalWrite(ledPin, HIGH); // LED ON
+
+} else { // BRIGHT condition Serial.println("LDR Brightness HIGH"); digitalWrite(ledPin, LOW); // LED OFF
+
+}
+
+
+
+delay(500);
+
+}
+
+
+
+
+
+Interfacing 16x2 I2C LCD with Arduino
+
+
+
+
+
+AIM: To interface an I2C LCD with Arduino and display the message "Hello World".
+
+Components Required
+
+• Arduino UNO
+
+• 16x2 I2C LCD
+
+Circuit Diagram:
+
+
+
+Theory:
+
+The 16×2 I2C LCD display is an alphanumeric module used to display text and data in embedded systems and is interfaced with the Arduino Uno available in the IoT Trainer Kit ACE
+
+703B using the I2C communication protocol. I2C communication uses only two lines, Serial Data (SDA) and Serial Clock (SCL), which reduces wiring complexity and allows multiple devices to be connected on the same bus. The LCD module in the trainer kit contains an I2C
+
+interface with an internal I/O expander that converts serial data from Arduino into parallel signals required by the LCD controller. Using the LiquidCrystal_I2C library, the Arduino initializes the display, controls the cursor position, and prints characters on the screen.
+
+
+
+Code:
+
+#include <Wire.h>
+
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C address, 16 columns, 2 rows void setup()
+
+{
+
+lcd.init();
+
+// Initialize LCD
+
+lcd.backlight();
+
+// Turn on backlight
+
+lcd.setCursor(0, 0); // Column 0, Row 0
+
+lcd.print("Hello World");
+
+}
+
+
+
+void loop()
+
+{
+
+// Nothing inside loop
+
+}
+
+
+
+
+
+Interfacing MPR121 Capacitive Touch Sensor with Arduino Using I2C Protocol
+
+
+
+
+
+AIM: To interface a capacitive touch sensor (MPR121) with Arduino using the I2C
+
+communication protocol and observe touch detection through serial monitoring.
+
+Components Required:
+
+• Arduino UNO
+
+• MPR121 Capacitive Touch Sensor Module
+
+Circuit Diagram:
+
+
+
+
+
+Theory:
+
+The MPR121 capacitive touch sensor provided in the IoT Trainer Kit is an I2C-based touch controller capable of detecting up to 12 touch electrodes by sensing changes in capacitance when a finger touches the sensor pads. It communicates with the Arduino Uno through the I2C protocol using SDA and SCL lines, enabling reliable and fast data exchange. The sensor continuously monitors electrode capacitance, applies digital filtering, and compares the values with preset touch and release thresholds to accurately detect touch events. When a touch is detected, the Arduino reads the sensor registers via I2C and displays the touched electrode information through serial monitoring.
+
+
+
+
+
+Code:
+
+#include <Wire.h>
+
+#define MPR121_ADDR 0x5A
+
+uint16_t last=0;
+
+void w(byte r, byte v){
+
+Wire.beginTransmission(MPR121_ADDR);
+
+Wire.write(r); Wire.write(v);
+
+Wire.endTransmission();
+
+}
+
+uint16_t readT(){
+
+Wire.beginTransmission(MPR121_ADDR);
+
+Wire.write(0x00);
+
+Wire.endTransmission(false);
+
+Wire.requestFrom(MPR121_ADDR,2);
+
+return Wire.read() | (Wire.read()<<8);}
+
+void setup(){
+
+Serial.begin(9600);
+
+Wire.begin();
+
+w(0x5E,0x00); // stop
+
+// FULL FILTER CONFIG (important!!)
+
+w(0x2B,0x01); w(0x2C,0x01);
+
+w(0x2D,0x00); w(0x2E,0x00);
+
+w(0x2F,0x01); w(0x30,0x01);
+
+w(0x31,0xFF); w(0x32,0x02);
+
+w(0x33,0x01); w(0x34,0x01);
+
+w(0x35,0xFF); w(0x36,0x02);
+
+// STRONG thresholds
+
+for(int i=0;i<12;i++){
+
+w(0x41+i*2,30);
+
+w(0x42+i*2,15); }
+
+w(0x5E,0x8F); // start
+
+Serial.println("READY"); }
+
+void loop(){
+
+uint16_t now=readT();
+
+uint16_t press=now & ~last;
+
+for(int i=0;i<12;i++)
+
+if(press&(1<<i)){
+
+Serial.print("Touched electrode "); Serial.println(i);
+
+}
+
+last=now;
+
+delay(60);
+
+
+
+}
+
+
+
+
+
+Interfacing MCP4725 DAC with Arduino
+
+
+
+
+
+AIM: To interface the MCP4725 12-bit Digital-to-Analog Converter (DAC) with Arduino UNO
+
+using I2C communication and generate analog voltage output.
+
+Components Required
+
+• Arduino UNO
+
+• MCP4725 DAC Module
+
+• Jumper wires
+
+Circuit Diagram:
+
+
+
+Theory:
+
+A Digital-to-Analog Converter (DAC) converts digital data into corresponding analog voltage.
+
+The MCP4725 is a 12-bit DAC that communicates using the I2C protocol via SDA and SCL pins.
+
+It accepts digital values from 0 to 4095 and produces an analog output between 0V and Vref (5V).
+
+The output voltage is calculated as:
+
+Digital Value
+
+𝑉𝑜𝑢𝑡 =
+
+× 𝑉
+
+4095
+
+𝑟𝑒𝑓
+
+
+
+For example, if Vref = 5V and digital value = 2048: 𝑉𝑜𝑢𝑡 ≈ 2.5𝑉
+
+
+
+
+
+Code:
+
+
+
+#include <Wire.h>
+
+#include <Adafruit_MCP4725.h>
+
+
+
+Adafruit_MCP4725 dac;
+
+
+
+void setup() {
+
+Serial.begin(9600);
+
+
+
+if (!dac.begin(0x60)) {
+
+Serial.println("DAC not found!"); while (1);
+
+}
+
+
+
+Serial.println("DAC Ready");
+
+}
+
+
+
+void loop() {
+
+
+
+for (int value = 0; value < 4096; value += 100) {
+
+
+
+dac.setVoltage(value, false);
+
+
+
+// Calculate expected output voltage (Assuming 5V reference) float voltage = (value * 5.0) / 4095.0;
+
+
+
+Serial.print("DAC Value: ");
+
+Serial.print(value);
+
+
+
+Serial.print(" | Expected Voltage: "); Serial.print(voltage);
+
+Serial.println(" V");
+
+
+
+delay(200);
+
+}
+
+
+
+}
+
+
+
+Interfacing Relay Module with Arduino UNO
+
+
+
+AIM: To interface a 2-channel relay module with Arduino UNO and control external loads using digital output pins.
+
+Components Required:
+
+• Arduino UNO
+
+• 2-Channel Relay Module
+
+• Jumper wire
+
+
+
+
+
+Theory
+
+A relay is an electrically operated switch that allows low-voltage circuits to control high-voltage loads safely.
+
+Most relay modules are active LOW, meaning:
+
+• LOW → Relay ON
+
+• HIGH → Relay OFF
+
+
+
+Code:
+
+int relay1 = 3;
+
+int relay2 = 4;
+
+void setup() {
+
+
+
+Serial.begin(9600);
+
+pinMode(relay1, OUTPUT);
+
+pinMode(relay2, OUTPUT);
+
+
+
+// For most relay modules, HIGH = OFF and LOW = ON
+
+digitalWrite(relay1, HIGH);
+
+digitalWrite(relay2, HIGH);
+
+
+
+
+
+Serial.println("Relay Test Started");
+
+}
+
+
+
+
+
+void loop() {
+
+
+
+
+
+// Turn both relays ON
+
+digitalWrite(relay1, LOW);
+
+digitalWrite(relay2, LOW);
+
+Serial.println("Relay 1: ON");
+
+Serial.println("Relay 2: ON");
+
+delay(1000);
+
+
+
+// Turn both relays OFF
+
+digitalWrite(relay1, HIGH);
+
+digitalWrite(relay2, HIGH);
+
+Serial.println("Relay 1: OFF");
+
+Serial.println("Relay 2: OFF");
+
+delay(1000);
+
+}
+
+
+
+
+
+Interfacing Arduino UNO with LDR and 16x2 LCD
+
+
+
+
+
+AIM:
+
+To interface an LDR sensor with Arduino uno and display the status on LCD
+
+Components Required:
+
+
+
+• Arduino UNO
+
+• LDR
+
+• LCD
+
+
+
+Circuit Diagram:
+
+
+
+
+
+Theory:
+
+A Light Dependent Resistor (LDR), also known as a photoresistor, is a passive electronic component whose resistance varies according to the intensity of incident light. It works on the principle of photoconductivity.
+
+When light falls on the LDR surface, photons transfer energy to the semiconductor material (usually cadmium sulfide – CdS), generating free charge carriers. As the number of charge carriers increases, the resistance of the LDR decreases.
+
+• High light intensity → Low resistance
+
+• Low light intensity (darkness) → High resistance Typically:
+
+• In bright light → resistance may drop to a few hundred ohms
+
+• In darkness → resistance may increase to several megaohms
+
+
+
+
+
+Since Arduino cannot directly measure resistance, the LDR is connected in a voltage divider circuit with a fixed resistor. The varying resistance produces a corresponding change in output voltage, which is read using the Arduino’s analog input (ADC).
+
+The Arduino UNO contains a 10-bit ADC, which converts analog voltage (0–5V) into digital values between 0 and 1023. Based on a predefined threshold value, the system determines whether the environment is bright or dark and displays the result on the LCD.
+
+Code:
+
+#include <Wire.h>
+
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+int ldrPin = A0;
+
+int threshold = 500; // Adjust based on testing void setup() {
+
+Serial.begin(9600);
+
+
+
+lcd.init();
+
+lcd.backlight();
+
+}
+
+void loop() {
+
+int ldrValue = analogRead(ldrPin);
+
+Serial.println(ldrValue);
+
+lcd.clear();
+
+if (ldrValue > threshold) {
+
+lcd.print("Light Detected");
+
+} else {
+
+lcd.print("Light Not");
+
+lcd.setCursor(0,1);
+
+lcd.print("Detected");
+
+}
+
+delay(500);
+
+}
+
+
+
+
+
+Interfacing Arduino UNO with Touch Sensor (MPR121) and 16x2 LCD
+
+AIM: To interface Arduino Uno with MPR121 capacitive touch sensor and display touched electrode number on 16x2 LCD.
+
+Components Required:
+
+• Arduino Uno
+
+• MPR121
+
+• 16x2 LCD
+
+• Connecting wires
+
+
+
+Circuit Diagram:
+
+
+
+
+
+Theory:
+
+The MPR121 capacitive touch sensor is a touch detection controller that operates based on the principle of capacitance variation. It can detect touch without mechanical pressure by sensing changes in the electrical capacitance of its electrodes. When a human finger approaches or touches an electrode, the capacitance increases because the human body acts as a conductive object. The MPR121 continuously monitors this change using its internal charge-discharge circuitry and compares it with predefined threshold values. If the change exceeds the threshold, a touch event is registered. The sensor supports up to 12 touch electrodes and communicates with the Arduino using the I2C protocol (SDA and SCL lines, typically at address 0x5A). In this experiment, when an electrode is touched, the Arduino reads the touch status data from the MPR121 and displays the corresponding electrode number on the LCD.
+
+
+
+
+
+Code:
+
+#include <Wire.h>
+
+#include <LiquidCrystal_I2C.h>
+
+#define MPR121_ADDR 0x5A
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+uint16_t last = 0;
+
+// REVERSED mapping
+
+char keys[12] = {
+
+'#','0','*',
+
+'9','8','7',
+
+'6','5','4',
+
+'3','2','1'
+
+};
+
+// Write register
+
+void w(byte r, byte v){
+
+Wire.beginTransmission(MPR121_ADDR);
+
+Wire.write(r);
+
+Wire.write(v);
+
+Wire.endTransmission();
+
+}
+
+// Read touch status
+
+uint16_t readT(){
+
+Wire.beginTransmission(MPR121_ADDR);
+
+Wire.write(0x00);
+
+Wire.endTransmission(false);
+
+Wire.requestFrom(MPR121_ADDR,2);
+
+return Wire.read() | (Wire.read()<<8);
+
+}
+
+
+
+void setup(){
+
+Wire.begin();
+
+lcd.init();
+
+lcd.backlight();
+
+lcd.print("Keypad Ready");
+
+// Stop MPR121
+
+w(0x5E,0x00);
+
+// Filter config
+
+w(0x2B,0x01); w(0x2C,0x01);
+
+w(0x2D,0x00); w(0x2E,0x00);
+
+w(0x2F,0x01); w(0x30,0x01);
+
+w(0x31,0xFF); w(0x32,0x02);
+
+w(0x33,0x01); w(0x34,0x01);
+
+w(0x35,0xFF); w(0x36,0x02);
+
+// Strong thresholds
+
+for(int i=0;i<12;i++){
+
+w(0x41+i*2,30);
+
+w(0x42+i*2,15);
+
+}
+
+// Start
+
+w(0x5E,0x8F);
+
+delay(1500);
+
+lcd.clear();
+
+}
+
+void loop(){
+
+uint16_t now = readT();
+
+uint16_t press = now & ~last;
+
+for(int i = 0; i < 12; i++){
+
+if(press & (1 << i)){
+
+lcd.clear();
+
+lcd.setCursor(0,0);
+
+lcd.print("Pressed:");
+
+lcd.setCursor(0,1);
+
+lcd.print(keys[i]);
+
+}
+
+}
+
+last = now;
+
+delay(60);
+
+}
+
+
+
+Interfacing SSD1306 OLED Display with Arduino Using SPI Communication Aim
+
+To interface an OLED display (SSD1306) with Arduino using SPI communication and display a custom text message on the screen.
+
+Components Required
+
+• Arduino UNO
+
+• OLED Display Module
+
+• Connecting wires
+
+• Breadboard
+
+
+
+Circuit Diagram
+
+
+
+
+
+Theory
+
+OLED (Organic Light Emitting Diode) displays are self-lighting devices that do not require a backlight, making them power-efficient and suitable for embedded systems. The SSD1306
+
+controller is commonly used in 128×64 OLED modules and supports both I2C and SPI communication.
+
+In SPI (Serial Peripheral Interface) communication, data is transmitted using multiple lines such as MOSI (Master Out Slave In), SCK (clock), CS (chip select), DC (data/command), and RESET. SPI is faster than I2C because it uses separate lines for data and clock signals, enabling high-speed communication. The Arduino acts as the master device and sends commands and data to the OLED display.
+
+
+
+
+
+Code
+
+#include <SPI.h>
+
+#include <Adafruit_GFX.h>
+
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+
+#define SCREEN_HEIGHT 64
+
+#define OLED_MOSI 11
+
+#define OLED_CLK 13
+
+#define OLED_DC 9
+
+#define OLED_CS 10
+
+#define OLED_RESET 8
+
+
+
+
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_MOSI, OLED_CLK,
+
+OLED_DC, OLED_RESET, OLED_CS);
+
+
+
+
+
+void setup() {
+
+display.begin(SSD1306_SWITCHCAPVCC);
+
+display.clearDisplay();
+
+
+
+display.setTextSize(2);
+
+display.setTextColor(SSD1306_WHITE);
+
+display.setCursor(0,10);
+
+
+
+display.println("MIT");
+
+display.display();
+
+}
+
+void loop() {
+
+}
+
+
+
+
+
+Interfacing BMP280 Sensor with Arduino Using I2C Communication Aim
+
+To interface the BMP280 sensor with Arduino and measure temperature and atmospheric pressure.
+
+Components Required
+
+• Arduino UNO
+
+• BMP280 Sensor Module
+
+• Connecting wires
+
+• Breadboard
+
+Circuit Diagram
+
+
+
+
+
+Theory
+
+The BMP280 is a digital sensor used to measure atmospheric pressure and temperature. It is widely used in weather monitoring systems and altitude measurement applications. The sensor operates using either I2C or SPI communication, but I2C is commonly used due to fewer connections.
+
+The BMP280 contains a piezoresistive pressure sensor and temperature sensor, along with an ADC (Analog-to-Digital Converter) that converts the measured values into digital form. The
+
+sensor communicates with the Arduino via the I2C protocol using SDA (data) and SCL (clock) lines.
+
+CODE
+
+#include <Wire.h>
+
+#include <Adafruit_BMP280.h>
+
+
+
+Adafruit_BMP280 bmp; // I2C
+
+
+
+void setup() {
+
+Serial.begin(9600);
+
+
+
+
+
+if (!bmp.begin(0x76)) {
+
+Serial.println("BMP280 not found"); while (1);
+
+}
+
+}
+
+
+
+
+
+void loop() {
+
+Serial.print("Temperature = ");
+
+Serial.print(bmp.readTemperature());
+
+Serial.println(" °C");
+
+
+
+Serial.print("Pressure = ");
+
+Serial.print(bmp.readPressure() / 100.0);
+
+Serial.println(" hPa");
+
+
+
+Serial.println(" ------------------- "); delay(2000);
+
+}
+
+
+
+EXPERIMENT 6
+
+Interfacing BMP280 with Arduino using Node-RED
+
+
+
+
+
+Aim
+
+To interface the BMP280 module with Arduino UNO and display the temperature and pressure using Node-RED.
+
+Components Required
+
+Arduino UNO
+
+BMP280 Sensor Module
+
+OLED Display
+
+Circuit Diagram
+
+Code
+
+#include <SPI.h>
+
+#include <Adafruit_BMP280.h>
+
+
+
+// SPI CS pin
+
+#define BMP_CS 10
+
+
+
+Adafruit_BMP280 bmp(BMP_CS);
+
+
+
+void setup() {
+
+Serial.begin(9600);
+
+delay(1000);
+
+
+
+// Initialize BMP280 (SPI mode)
+
+if (!bmp.begin(0x58)) {
+
+while (1); // Stop if sensor not found
+
+}
+
+}
+
+
+
+void loop() {
+
+float temp = bmp.readTemperature();
+
+float pressure = bmp.readPressure() / 100.0; // Convert to hPa
+
+
+
+// Send JSON data
+
+Serial.print("{\"temp\":"); Serial.print(temp);
+
+Serial.print(",\"pressure\":"); Serial.print(pressure);
+
+Serial.println("}");
+
+
+
+delay(2000);
+
+}
+
+
+
+
+
+Node-RED
+
+
+
+Output
+
+
+
+
+
+RASPBERRY PI – IR SENSOR
+
+AIM: To interface an IR sensor with Raspberry Pi and detect object motion using infrared light reflection.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• IR sensor
+
+CIRCUIT DIAGRM:
+
+
+
+
+
+CODE:
+
+import RPi.GPIO as GPIO
+
+import time
+
+# Set GPIO mode to BCM
+
+GPIO.setmode(GPIO.BCM)
+
+# Define IR sensor pin
+
+IR_SENSOR_PIN = 17 # GPIO17 (Physical Pin 11)
+
+# Set IR sensor pin as input
+
+GPIO.setup(IR_SENSOR_PIN, GPIO.IN)
+
+print("IR Sensor Test on Raspberry Pi Started") try:
+
+while True:
+
+if GPIO.input(IR_SENSOR_PIN) == 0:
+
+print("Obstacle Detected")
+
+else:
+
+print("No Obstacle")
+
+time.sleep(0.5) # Delay of 0.5 seconds
+
+
+
+except KeyboardInterrupt:
+
+print("Program stopped by user")
+
+finally:
+
+GPIO.cleanup()
+
+
+
+
+
+RASPBERRY PI - LDR SENSOR
+
+AIM: To interface an LDR (Light Dependent Resistor) sensor with Raspberry Pi and measure changes in light intensity.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• LDR sensor
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import RPi.GPIO as GPIO
+
+import time
+
+# Set GPIO mode
+
+GPIO.setmode(GPIO.BCM)
+
+# LDR digital output pin
+
+LDR_PIN = 27 # GPIO27 (Physical Pin 13)
+
+# Setup pin as input
+
+GPIO.setup(LDR_PIN, GPIO.IN)
+
+print("Digital LDR Sensor Test Started")
+
+
+
+try:
+
+while True:
+
+ldr_value = GPIO.input(LDR_PIN)
+
+if ldr_value == 1:
+
+print("It is Bright")
+
+else:
+
+print("It is Dark")
+
+time.sleep(0.5)
+
+except KeyboardInterrupt:
+
+print("Program stopped by user")
+
+finally:
+
+GPIO.cleanup()
+
+
+
+
+
+RASPBERRY PI – ULTRASONIC SENSOR
+
+AIM: To interface an ultrasonic sensor with Raspberry Pi and measure the distance of an object using ultrasonic sound waves.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• Ultrasonic sensor
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import RPi.GPIO as GPIO
+
+import time
+
+# Set GPIO mode
+
+
+
+GPIO.setmode(GPIO.BCM)
+
+# Define GPIO pins
+
+GPIO_TRIGGER = 4 # Trigger pin (GPIO4 - Pin 7) GPIO_ECHO = 17 # Echo pin (GPIO17 - Pin 11)
+
+# Setup GPIO direction
+
+GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
+
+GPIO.setup(GPIO_ECHO, GPIO.IN)
+
+# Function to calculate distance
+
+def distance():
+
+# Set Trigger HIGH
+
+GPIO.output(GPIO_TRIGGER, True)
+
+# Set Trigger LOW after 10 microseconds
+
+time.sleep(0.00001)
+
+GPIO.output(GPIO_TRIGGER, False)
+
+start_time = time.time()
+
+stop_time = time.time()
+
+# Save start time
+
+while GPIO.input(GPIO_ECHO) == 0:
+
+start_time = time.time()
+
+# Save time of arrival
+
+while GPIO.input(GPIO_ECHO) == 1:
+
+stop_time = time.time()
+
+# Time difference
+
+time_elapsed = stop_time - start_time
+
+# Distance calculation (cm)
+
+distance_cm = (time_elapsed * 34300) / 2
+
+return distance_cm
+
+
+
+
+
+try:
+
+print("Ultrasonic Sensor Measurement Started") while True:
+
+
+
+dist = distance()
+
+print(f"Measured Distance = {dist:.2f} cm") time.sleep(1)
+
+except KeyboardInterrupt:
+
+print("Measurement stopped by User") finally:
+
+GPIO.cleanup()
+
+
+
+
+
+RASPBERRY PI - ACTIVE BUZZER:
+
+AIM: To interface an active buzzer with Raspberry Pi and generate sound output using digital signals.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• Buzzer
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import RPi.GPIO as GPIO
+
+import time
+
+# Set GPIO mode
+
+GPIO.setmode(GPIO.BCM)
+
+# Buzzer GPIO pin
+
+BUZZER = 17 # GPIO17 (Physical Pin 11)
+
+# Set buzzer pin as output
+
+GPIO.setup(BUZZER, GPIO.OUT)
+
+
+
+print("Buzzer Test Started")
+
+try:
+
+while True:
+
+# Turn buzzer ON
+
+GPIO.output(BUZZER, GPIO.HIGH)
+
+print("Buzzer ON")
+
+time.sleep(1)
+
+# Turn buzzer OFF
+
+GPIO.output(BUZZER, GPIO.LOW)
+
+print("Buzzer OFF")
+
+time.sleep(1)
+
+except KeyboardInterrupt:
+
+print("Program stopped by user")
+
+finally:
+
+GPIO.cleanup()
+
+
+
+
+
+Interfacing Raspberry Pi with OLED Display (SSD1306)
+
+
+
+
+
+AIM: To interface an OLED display module (SSD1306) with a Raspberry Pi using SPI communication and display a custom text message on the screen.
+
+COMPONENT REQUIRED:
+
+• Raspberry Pi
+
+• OLED Display Module (SSD1306 – 128 × 64)
+
+• Jumper Wires
+
+• Breadboard (optional)
+
+
+
+
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import board
+
+import busio
+
+import digitalio
+
+from PIL import Image, ImageDraw, ImageFont import adafruit_ssd1306 # or adafruit_sh1106 if using SH1106
+
+# SPI interface
+
+spi = busio.SPI(clock=board.SCK, MOSI=board.MOSI)
+
+# Control pins
+
+cs = digitalio.DigitalInOut(board.CE0)
+
+# GPIO8
+
+dc = digitalio.DigitalInOut(board.MISO) # GPIO9 (used as DC) reset = digitalio.DigitalInOut(board.D25) # GPIO25
+
+OLED display object
+
+oled = adafruit_ssd1306.SSD1306_SPI(128, 64, spi, dc=dc, reset=reset, cs=cs)
+
+# Clear display
+
+oled.fill(0)
+
+oled.show()
+
+# Create blank image
+
+image = Image.new("1", (oled.width, oled.height)) draw = ImageDraw.Draw(image)
+
+# Load default font
+
+font = ImageFont.load_default()
+
+# Text to display
+
+name = "DEEKSHA"
+
+# Calculate text size for centering
+
+bbox = draw.textbbox((0, 0), name, font=font) text_width = bbox[2] - bbox[0]
+
+text_height = bbox[3] - bbox[1]
+
+# Center text
+
+x = (oled.width - text_width) // 2
+
+y = (oled.height - text_height) // 2
+
+# Draw text
+
+draw.text((x, y), name, font=font, fill=255)
+
+# Display image
+
+oled.image(image)
+
+oled.show()
+
+
+
+
+
+Interfacing Raspberry Pi with RFID Reader AIM: To interface an RFID reader module with a Raspberry Pi and read RFID tag data for identification and access control applications.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• RFID Reader Module (MFRC522)
+
+• RFID Tags / Cards
+
+
+
+
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import RPi.GPIO as GPIO
+
+from mfrc522 import SimpleMFRC522
+
+# Disable warnings
+
+GPIO.setwarnings(False)
+
+# Set GPIO mode
+
+GPIO.setmode(GPIO.BCM)
+
+# Create RFID reader object
+
+reader = SimpleMFRC522()
+
+try:
+
+print("Scan RFID card...")
+
+while True:
+
+card_id, text = reader.read()
+
+print("Card ID:", card_id)
+
+print("Card Data:", text)
+
+except KeyboardInterrupt:
+
+print("\nProgram stopped")
+
+finally:
+
+GPIO.cleanup()
+
+
+
+
+
+Interfacing Raspberry Pi with LED Matrix (MAX7219) AIM: To interface an LED matrix display with a Raspberry Pi using SPI communication and display a scrolling text message.
+
+
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• LED Matrix Module (MAX7219 Based)
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import RPi.GPIO as GPIO
+
+GPIO.setwarnings(False) # suppress warnings from luma.core.interface.serial import spi
+
+from luma.led_matrix.device import max7219
+
+from luma.core.render import canvas
+
+from PIL import ImageFont
+
+import time
+
+# SPI configuration
+
+serial = spi(port=0, device=0) # CE0 = GPIO8
+
+# LED matrix configuration
+
+device = max7219(serial, width=32, height=8, rotate=0)
+
+# Load default font
+
+font = ImageFont.load_default()
+
+# Message to display
+
+
+
+message = "MIT MANIPAL "
+
+try:
+
+while True:
+
+# Scroll message pixel by pixel
+
+
+
+for i in range(len(message) * 8):
+
+with canvas(device) as draw:
+
+draw.text((-i, 0), message, font=font, fill=255) time.sleep(0.05)
+
+except KeyboardInterrupt:
+
+print("\nProgram stopped by user") finally:
+
+device.clear()
+
+GPIO.cleanup()
+
+
+
+
+
+Interfacing Raspberry Pi with ADC (MCP3208) AIM: To interface an Analog-to-Digital Converter (ADC) with a Raspberry Pi using SPI communication and read analog voltage from an external sensor or potentiometer.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• ADC IC (MCP3208 – 12-bit)
+
+• Potentiometer / Analog Sensor
+
+CIRCUIT DIAGRAM:
+
+
+
+CODE:
+
+import spidev
+
+import time
+
+# SPI setup
+
+spi = spidev.SpiDev()
+
+spi.open(0, 0) # Bus 0, CE0
+
+spi.max_speed_hz = 1000000
+
+channel = 0
+
+def read_adc(channel):
+
+"""Read ADC value from MCP3208 (12-bit)"""
+
+if channel < 0 or channel > 7:
+
+return -1
+
+start_bit = 0x04
+
+sgl_diff = 0x02
+
+command = start_bit | ((sgl_diff | (channel >> 2)) & 0x03) data = [command, (channel & 0x03) << 6, 0x00]
+
+response = spi.xfer2(data)
+
+result = ((response[1] & 0x0F) << 8) | response[2]
+
+return result
+
+def read_voltage(channel, vref=3.3):
+
+adc_value = read_adc(channel)
+
+voltage = (adc_value / 4095) * vref
+
+return voltage
+
+try:
+
+while True:
+
+voltage = read_voltage(channel)
+
+print("ADC Voltage:", round(voltage, 2), "V") time.sleep(0.2)
+
+except KeyboardInterrupt:
+
+print("\nProgram stopped")
+
+
+
+finally:
+
+spi.close()
+
+
+
+
+
+Interfacing Raspberry Pi with Joystick Module (Using MCP3208
+
+ADC)
+
+AIM: To interface a joystick module with a Raspberry Pi using an MCP3208 Analog-to-Digital Converter (ADC) and read X-axis, Y-axis, and switch (button) values.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• Joystick Module
+
+• MCP3208 ADC IC
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import spidev
+
+import time
+
+import RPi.GPIO as GPIO
+
+SW_PIN = 17
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(SW_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) spi = spidev.SpiDev()
+
+spi.open(0, 0)
+
+spi.max_speed_hz = 1000000
+
+def read_adc(channel):
+
+if channel < 0 or channel > 7:
+
+return -1
+
+start_bit = 0x04
+
+sgl_diff = 0x02
+
+command = start_bit | ((sgl_diff | (channel >> 2)) & 0x03) data = [command, (channel & 0x03) << 6, 0x00]
+
+response = spi.xfer2(data)
+
+result = ((response[1] & 0x0F) << 8) | response[2]
+
+return result
+
+try:
+
+while True:
+
+x_val = read_adc(0)
+
+y_val = read_adc(1)
+
+sw_val = GPIO.input(SW_PIN)
+
+print("X:", x_val, " Y:", y_val, " Switch:", sw_val) time.sleep(0.2)
+
+except KeyboardInterrupt:
+
+print("\nProgram stopped")
+
+finally:
+
+spi.close()
+
+GPIO.cleanup()
+
+
+
+Interfacing Raspberry Pi with Gas Sensor (Using MCP3208 ADC) AIM: To interface a gas sensor module with Raspberry Pi using MCP3208 ADC and measure gas concentration in the form of analog voltage.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• Gas Sensor Module (MQ-2 / MQ-135 or similar)
+
+• MCP3208 ADC IC
+
+
+
+
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import spidev
+
+import time
+
+spi = spidev.SpiDev()
+
+spi.open(0, 0)
+
+spi.max_speed_hz = 1000000
+
+channel = 0
+
+def read_adc(channel):
+
+if channel < 0 or channel > 7:
+
+return -1
+
+start_bit = 0x04
+
+sgl_diff = 0x02
+
+command = start_bit | ((sgl_diff | (channel >> 2)) & 0x03) data = [command, (channel & 0x03) << 6, 0x00]
+
+response = spi.xfer2(data)
+
+result = ((response[1] & 0x0F) << 8) | response[2]
+
+return result
+
+
+
+def read_voltage(channel, vref=3.3):
+
+adc_val = read_adc(channel)
+
+voltage = (adc_val / 4095) * vref
+
+return voltage
+
+try:
+
+while True:
+
+value = read_adc(channel)
+
+voltage = read_voltage(channel)
+
+print("Gas Sensor ADC Value:", value) print("Gas Sensor Voltage:", round(voltage, 2), "V") time.sleep(1)
+
+except KeyboardInterrupt:
+
+print("\nProgram stopped")
+
+finally:
+
+spi.close()
+
+
+
+
+
+RASPBERRY PI – LCD
+
+AIM: To interface a 16×2 I2C LCD display with Raspberry Pi 4 Model B and display text output using I2C communication protocol.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• 16×2 LCD Display
+
+CIRCUIT DIAGRM:
+
+
+
+CODE:
+
+from RPLCD.i2c import CharLCD
+
+import time
+
+# Initialize LCD with I2C address
+
+lcd = CharLCD(i2c_expander='PCF8574', address=0x27,
+
+port=1,
+
+cols=16,
+
+rows=2,
+
+dotsize=8)
+
+print("I2C LCD Test Started")
+
+try:
+
+lcd.clear()
+
+lcd.write_string("Raspberry Pi")
+
+lcd.cursor_pos = (1, 0)
+
+lcd.write_string("I2C LCD Ready") while True:
+
+time.sleep(1)
+
+except KeyboardInterrupt:
+
+print("Program stopped by user")
+
+finally:
+
+lcd.clear()
+
+
+
+
+
+RASPBERRY PI – MPR121 CAPACITIVE TOUCH SENSOR
+
+AIM: To interface the MPR121 capacitive touch sensor with Raspberry Pi 4 Model B and detect touch input using I2C communication.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• MPR121Capacitive Touch Sensor Module
+
+• Jumper Wires
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+13EXRY
+
+CODE:
+
+import time
+
+import board
+
+import busio
+
+import adafruit_mpr121
+
+# Create I2C bus
+
+
+
+i2c = busio.I2C(board.SCL, board.SDA)
+
+# Initialize MPR121 sensor
+
+mpr121 = adafruit_mpr121.MPR121(i2c)
+
+print("Waiting for touch...")
+
+while True:
+
+for i in range(12):
+
+if mpr121[i].value:
+
+if i == 0:
+
+print("1 touched")
+
+elif i == 1:
+
+print("0 touched")
+
+elif i == 2:
+
+print("8 touched")
+
+elif i == 3:
+
+print("9 touched")
+
+elif i == 4:
+
+print("8 touched")
+
+
+
+elif i == 5:
+
+print("7 touched")
+
+elif i == 6:
+
+print("6 touched")
+
+elif i == 7:
+
+print("5 touched")
+
+elif i == 8:
+
+print("4 touched")
+
+elif i == 9:
+
+print("3 touched")
+
+elif i == 10:
+
+print("2 touched")
+
+elif i == 11:
+
+
+
+
+
+RASPBERRY PI – MCP4725 DIGITAL TO ANALOG
+
+CONVERTER
+
+AIM: To interface the MCP4725 Digital-to-Analog Converter (DAC) with Raspberry Pi 4
+
+Model B using I2C communication and generate analog output voltage.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• MCP4725 DAC Module
+
+
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+CODE:
+
+import smbus
+
+import time
+
+# MCP4725 I2C Address
+
+DAC_ADDR = 0x60
+
+# Create I2C bus
+
+bus = smbus.SMBus(1)
+
+print("MCP4725 DAC Experiment Started") while True:
+
+# DAC Output HIGH (LED ON)
+
+value = 4095 # Maximum 12-bit value
+
+
+
+high_byte = (value >> 4) & 0xFF
+
+low_byte = (value << 4) & 0xFF
+
+bus.write_i2c_block_data(DAC_ADDR, high_byte, [low_byte]) print("DAC Output HIGH")
+
+time.sleep(1)
+
+# DAC Output LOW (LED OFF)
+
+value = 0
+
+high_byte = (value >> 4) & 0xFF
+
+low_byte = (value << 4) & 0xFF
+
+bus.write_i2c_block_data(DAC_ADDR, high_byte, [low_byte]) print("DAC Output LOW")
+
+time.sleep(1)
+
+
+
+
+
+RASPBERRY PI – RELAY INTERFACING
+
+AIM: To interface a relay module with Raspberry Pi 4 Model B and control an electrical load by switching the relay ON and OFF using Python programming.
+
+COMPONENTS REQUIRED:
+
+• Raspberry Pi
+
+• Relay Module
+
+• Jumper Wires
+
+
+
+
+
+CODE:
+
+import RPi.GPIO as GPIO
+
+import time
+
+# GPIO mode
+
+GPIO.setmode(GPIO.BCM)
+
+# Relay control pin
+
+RELAY_PIN = 17
+
+# Set relay pin as output
+
+GPIO.setup(RELAY_PIN, GPIO.OUT)
+
+print("Relay Experiment Started") try:
+
+while True:
+
+# Relay ON
+
+GPIO.output(RELAY_PIN, GPIO.HIGH)
+
+print("Relay ON")
+
+time.sleep(2)
+
+# Relay OFF
+
+GPIO.output(RELAY_PIN, GPIO.LOW)
+
+print("Relay OFF")
+
+time.sleep(2)
+
+except KeyboardInterrupt:
+
+print("Program Stopped")
+
+finally:
+
+GPIO.cleanup()
+
+
+
+
+
+CIRCUIT DIAGRAM:
+
+
+
+
+
+EXPERIMENT 7 Firebase Real-Time Monitoring using Node-RED
+
+Aim :
+
+To interface a potentiometer with Arduino UNO and send its real-time analog values to Firebase using Node-RED.
+
+Components Required:
+
+Arduino UNO
+
+ Potentiometer (10kΩ)
+
+ Jumper wires
+
+ USB Cable
+
+ System with Node-RED installed
+
+ Internet connection
+
+
+
+
+
+Code:
+
+void setup() {
+
+Serial.begin(9600);
+
+delay(1000);
+
+
+
+
+
+Serial.println("Potentiometer Started");
+
+}
+
+
+
+
+
+void loop() {
+
+int value = analogRead(A0); // Read analog value (0–1023) Serial.print("{\"pot\":"); Serial.print(value);
+
+Serial.println("}");
+
+
+
+
+
+delay(1000);
+
+}
+
+
+
+
+
+pin configuration:
+
+
+
+Potentiometer Pin
+
+Arduino UNO Pin
+
+Description
+
+Left Pin
+
+GND
+
+Ground
+
+Right Pin
+
+5V
+
+Power
+
+Middle (Wiper)
+
+A0
+
+Analog Input
+
+
+
+Conclusion:
+
+The experiment successfully demonstrated real-time data acquisition and cloud integration using Arduino, Node-RED, and Firebase. The analog values from the potentiometer were read using ADC, processed through Node-RED, and transmitted to Firebase Realtime Database. The continuous update of values confirmed reliable real-time communication and highlighted the effectiveness of IoT-based remote monitoring systems.
+
+
+
+
+
+Document Outline
+
+
+EXPERIMENT 7 Firebase Real-Time Monitoring using Node-RED
+
+Components Required:
+
+
+
+
+
