@@ -1,0 +1,23 @@
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+int ldr = A0;
+int led = 2;
+
+void setup() {
+lcd.begin();
+pinMode(led, OUTPUT);
+}
+
+void loop() {
+int val = analogRead(ldr);
+
+if (val > 500) {
+lcd.clear();
+lcd.print("LDR HIGH");
+
+digitalWrite(led, HIGH);
+delay(3000);
+digitalWrite(led, LOW);
+}
+}
