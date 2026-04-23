@@ -1,0 +1,26 @@
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+int pin = A0;
+int led = 2;
+
+void setup() {
+lcd.begin();
+pinMode(led, OUTPUT);
+}
+
+void loop() {
+int val = analogRead(pin);
+float volt = val * (5.0/1023);
+
+lcd.setCursor(0,0);
+lcd.print("V:");
+lcd.print(volt);
+
+if (volt > 0.7) {
+digitalWrite(led, HIGH);
+delay(3000);
+digitalWrite(led, LOW);
+}
+}
+
