@@ -1,0 +1,43 @@
+import spidev, time
+
+spi = spidev.SpiDev()
+spi.open(0,0)
+
+def read(ch):
+r = spi.xfer2([1,(8+ch)<<4,0])
+return ((r[1]&3)<<8)+r[2]
+
+while True:
+x = read(0)
+y = read(1)
+
+if x < 1000: print("LEFT")
+elif x > 3000: print("RIGHT")
+
+if y < 1000: print("DOWN")
+elif y > 3000: print("UP")
+
+time.sleep(0.5)
+int trig = 9;
+int echo = 10;
+int buzzer = 3;
+
+void setup() {
+pinMode(trig, OUTPUT);
+pinMode(echo, INPUT);
+pinMode(buzzer, OUTPUT);
+}
+
+void loop() {
+digitalWrite(trig, LOW);
+delayMicroseconds(2);
+digitalWrite(trig, HIGH);
+delayMicroseconds(10);
+digitalWrite(trig, LOW);
+
+long dur = pulseIn(echo, HIGH);
+float dist = dur * 0.034 / 2;
+
+if (dist < 5) digitalWrite(buzzer, HIGH);
+else digitalWrite(buzzer, LOW);
+}
