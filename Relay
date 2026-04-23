@@ -1,0 +1,39 @@
+int irPin = 7;
+int relay = 8;
+
+void setup() {
+pinMode(irPin, INPUT);
+pinMode(relay, OUTPUT);
+}
+
+void loop() {
+int val = digitalRead(irPin);
+
+if (val == LOW) {
+digitalWrite(relay, HIGH); // ON
+} else {
+digitalWrite(relay, LOW);
+}
+}
+
+import RPi.GPIO as GPIO
+import firebase_admin
+from firebase_admin import credentials, db
+import time
+
+cred = credentials.Certificate("key.json")
+firebase_admin.initialize_app(cred, {
+'databaseURL': 'YOUR_URL'
+})
+
+ref = db.reference('IR')
+
+GPIO.setmode(GPIO.BCM)
+IR = 17
+GPIO.setup(IR, GPIO.IN)
+
+while True:
+val = GPIO.input(IR)
+ref.set(val)
+time.sleep(1)
+
