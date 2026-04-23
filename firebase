@@ -1,0 +1,25 @@
+import board, busio
+import adafruit_mpr121
+from RPLCD.i2c import CharLCD
+import firebase_admin
+from firebase_admin import credentials, db
+import time
+
+Firebase
+cred = credentials.Certificate("key.json")
+firebase_admin.initialize_app(cred, {'databaseURL':'URL'})
+ref = db.reference('touch')
+
+I2C
+i2c = busio.I2C(board.SCL, board.SDA)
+mpr = adafruit_mpr121.MPR121(i2c)
+
+lcd = CharLCD('PCF8574', 0x27)
+
+while True:
+for i in range(12):
+if mpr[i].value:
+lcd.clear()
+lcd.write_string(f"Touch: {i}")
+ref.set(i)
+time.sleep(0.5)
