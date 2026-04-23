@@ -1,0 +1,33 @@
+#include <Wire.h>
+#include <Adafruit_BMP280.h>
+#include <LiquidCrystal_I2C.h>
+
+Adafruit_BMP280 bmp;
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+int buzzer = 3;
+int resetBtn = 4;
+
+void setup() {
+bmp.begin(0x76);
+lcd.begin();
+pinMode(buzzer, OUTPUT);
+pinMode(resetBtn, INPUT_PULLUP);
+}
+
+void loop() {
+float temp = bmp.readTemperature();
+
+lcd.setCursor(0,0);
+lcd.print("Temp:");
+lcd.print(temp);
+
+if (temp > 28) {
+digitalWrite(buzzer, HIGH);
+}
+
+if (digitalRead(resetBtn) == LOW) {
+digitalWrite(buzzer, LOW);
+}
+}
+
